@@ -1,5 +1,5 @@
 # FIFO-Char-Driver
-[EN] Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
+[EN] 👨‍🔧 Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
 As such, it's SMP-Safe due to the use of semaphores (working as condition variable and mutexes).
 
 Usage: Compile, load the module, create the driver (mknod), use the pipe!
