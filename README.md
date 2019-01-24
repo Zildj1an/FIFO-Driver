@@ -1,4 +1,4 @@
-# FIFO-Char-Driver                  [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/)
+# FIFO-Char-Driver [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/)
 
 ## Main Idea (English)
 👨‍🔧 Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
