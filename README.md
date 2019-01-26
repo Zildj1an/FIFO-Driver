@@ -20,3 +20,6 @@ Usage: Compile, load the module, create the driver (mknod), use the pipe!
 ## Idea principal (Español)
 Driver de caracteres (/dev) funcionando como una tubería FIFO, creado usando un módulo del Kernel Linux.
 Como tal, es SMP-Safe gracias al uso de semáforos (trabajando como variables-condicón y cerrojos). Para usarlo primero hay que compilar, cargar el módulo y crear el driver (mknod), tal y como se especifica arriba.
+
+## License
+This project is licensed under the GNU-GPL License - see the <a href="https://github.com/Zildj1an/Kernel-Numbers-Generator/blob/master/LICENSE">LICENSE.md</a> file for details
