@@ -22,4 +22,4 @@ Driver de caracteres (/dev) funcionando como una tubería FIFO, creado usando un
 Como tal, es SMP-Safe gracias al uso de semáforos (trabajando como variables-condicón y cerrojos). Para usarlo primero hay que compilar, cargar el módulo y crear el driver (mknod), tal y como se especifica arriba.
 
 ## License
-This project is licensed under the GNU-GPL License - see the <a href="https://github.com/Zildj1an/Kernel-Numbers-Generator/blob/master/LICENSE">LICENSE.md</a> file for details
+This project is licensed under the GNU-GPL License - see the <a href="https://github.com/Zildj1an/FIFO-Driver/blob/master/LICENSE">LICENSE.md</a> file for details
