@@ -5,7 +5,7 @@
   <a href="https://github.com/Zildj1an/FIFO-Driver">English</a> 
 </p>
 
-## Main Idea (English)
+## Main Idea
 👨‍🔧 Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
 As such, it's SMP-Safe due to the use of semaphores (working as condition variable and mutexes).
 
