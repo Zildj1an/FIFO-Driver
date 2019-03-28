@@ -1,4 +1,4 @@
-obj-m += fifo.o
+obj-m += fifodev.o
 
 ## Compilado desde /mnt/hgfs/shared de MV Debian
 ANDROIDSRC=../oreo-src-repo-slim/oreo-src
