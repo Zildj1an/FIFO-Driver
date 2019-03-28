@@ -1,9 +1,8 @@
 # FIFO-Char-Driver [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/)
-  <p align="center">
+
 <span>Language:</span> 
   <a href="https://github.com/Zildj1an/FIFO-Driver/blob/master/LEEME.md">Español</a> |
   <a href="https://github.com/Zildj1an/FIFO-Driver">English</a> 
-</p>
 
 ## Main Idea
 👨‍🔧 Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
