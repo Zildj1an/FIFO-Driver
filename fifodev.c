@@ -33,7 +33,8 @@ struct cdev* chardev = NULL;    /* Cdev structure associated with the driver */
 //* --------------------- FIFO Functions --------------------- *//
 
 /* Auxiliar function ~ home-made kernel-level cond_wait()*/
-static int cond_wait(int *prod){
+static int cond_wait(int *prod)
+{
 
 	struct semaphore *aux;
 	int *counter;
@@ -44,53 +45,54 @@ static int cond_wait(int *prod){
 	/* As cond_wait() : unlock, block thread at queue, lock */
         up(&mtx);
 
-	if(down_interruptible(aux)){
+	if (down_interruptible(aux)){
                 if(down_interruptible(&mtx));
                 *counter = *counter - 1;
                 up(&mtx);
                 return -EINTR;
         }
 
-	if(down_interruptible(&mtx)) return -EINTR;
+	if (down_interruptible(&mtx)) return -EINTR;
 
 	return 0;
 }
 
 /* Invoked when doing open() at /dev entry */
-static int fifoproc_open(struct inode *in, struct file *f){
+static int fifoproc_open(struct inode *in, struct file *f)
+{
 
 	int isProducer;
 
 	/* lock */
-	if(down_interruptible(&mtx)) return -EINTR;
+	if (down_interruptible(&mtx)) return -EINTR;
 
-	if(f->f_mode & FMODE_READ){ /* Consumidor */
+	if (f->f_mode & FMODE_READ){ /* Consumidor */
 		cons_count++;
 		isProducer = 0;
 
 		/* cond_signal(prod) */
-		if(nr_prod_waiting > 0){
+		if (nr_prod_waiting > 0) {
 			nr_prod_waiting--;
 			up(&sem_prod);
 		}
 
-		while(prod_count == 0){
+		while (prod_count == 0){
 			nr_cons_waiting++;
-			if(cond_wait(&isProducer)) return -EINTR;
+			if (cond_wait(&isProducer)) return -EINTR;
 		}
 	}
 	else { /* Productor */
 		prod_count++;
 		isProducer = 1;
 
-		if(nr_cons_waiting > 0){
+		if (nr_cons_waiting > 0){
 			nr_cons_waiting--;
 			up(&sem_cons);
 		}
 
-		while(cons_count == 0){
+		while (cons_count == 0){
 			nr_prod_waiting++;
-			if(cond_wait(&isProducer)) return -EINTR;
+			if (cond_wait(&isProducer)) return -EINTR;
 		}
 	}
 
@@ -101,15 +103,16 @@ static int fifoproc_open(struct inode *in, struct file *f){
 }
 
 /* Invoked when doing close() at /dev entry */
-static int fifoproc_release(struct inode *i, struct file *f){
+static int fifoproc_release(struct inode *i, struct file *f)
+{
 
 	/* lock */
-	if(down_interruptible(&mtx)) return -EINTR;
+	if (down_interruptible(&mtx)) return -EINTR;
 
-	if(f->f_mode & FMODE_READ){ /* Consumidor */
+	if (f->f_mode & FMODE_READ){ /* Consumidor */
 		cons_count--;
 
-		if(nr_prod_waiting > 0){ /* Evita errores EPIPE */
+		if (nr_prod_waiting > 0){ /* Evita errores EPIPE */
 			nr_prod_waiting--;
 			up(&sem_prod);
 		}
@@ -117,26 +120,27 @@ static int fifoproc_release(struct inode *i, struct file *f){
 	else { /* Productor */
 		prod_count--;
 
-		if(nr_cons_waiting > 0){
+		if (nr_cons_waiting > 0){
 			nr_cons_waiting--;
 			up(&sem_cons);
 		}
 	}
 
-	if(prod_count == 0 && cons_count == 0) kfifo_reset(&cbuffer);
+	if (prod_count == 0 && cons_count == 0) kfifo_reset(&cbuffer);
 	up(&mtx);
 
 	return 0;
 }
 
 /* Invoked when doing read() at /dev entry */
-static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l){
+static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l)
+{
 
 	char kbuffer[MAX_KBUF];
 	int isProducer = 0, len;
 
 	/* lock */
-	if(down_interruptible(&mtx)) return -EINTR;
+	if (down_interruptible(&mtx)) return -EINTR;
 
 	/* Wants to read more than it is available */
 	while (kfifo_len(&cbuffer) == 0 && prod_count > 0){
@@ -144,7 +148,7 @@ static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l)
 		if(cond_wait(&isProducer)) return -EINTR;
 	}
 
-	if(kfifo_is_empty(&cbuffer)){
+	if (kfifo_is_empty(&cbuffer)){
 		up(&mtx);
 		return 0;
 	}
@@ -153,7 +157,7 @@ static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l)
 
 	len = kfifo_out(&cbuffer, kbuffer, len);
 
-	if(nr_prod_waiting > 0){
+	if (nr_prod_waiting > 0){
 		--nr_prod_waiting;
 		up(&sem_prod);
 	}
@@ -161,37 +165,38 @@ static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l)
 	/*unlock */
 	up(&mtx);
 
-	if(copy_to_user(buff,kbuffer,len)) return -ENOMEM;
+	if (copy_to_user(buff,kbuffer,len)) return -ENOMEM;
 
  return len;
 }
 
 /* Invoked when doing write() at /dev entry */
-static ssize_t fifoproc_write(struct file *f,const char *buff, size_t size, loff_t *l){
+static ssize_t fifoproc_write(struct file *f,const char *buff, size_t size, loff_t *l)
+{
 
 	char kbuffer[MAX_KBUF];
 	int isProducer = 1;
 
-	if(size > MAX_KBUF) return -ENOMEM;
+	if (size > MAX_KBUF) return -ENOMEM;
 
-	if(copy_from_user(kbuffer, buff,size)) return -ENOMEM;
+	if (copy_from_user(kbuffer, buff,size)) return -ENOMEM;
 
 	/* lock */
-	if(down_interruptible(&mtx)) return -EINTR;
+	if (down_interruptible(&mtx)) return -EINTR;
 
-	while(kfifo_avail(&cbuffer) < size && cons_count > 0){
+	while (kfifo_avail(&cbuffer) < size && cons_count > 0){
 		nr_prod_waiting++;
 		if(cond_wait(&isProducer)) return -EINTR;
 	}
 
 	kfifo_in(&cbuffer, kbuffer,size);
 
-	if(cons_count == 0) {
+	if (cons_count == 0) {
 		up(&mtx);
 		return -EPIPE;
 	}
 
-	if(nr_cons_waiting > 0){
+	if (nr_cons_waiting > 0){
                 --nr_cons_waiting;
                 up(&sem_cons);
         }
@@ -210,12 +215,13 @@ const struct file_operations fops = {
 	.release =    fifoproc_release,
 };
 
-int modulo_fifo_init(void){
+int modulo_fifo_init(void)
+{
 
 	int ret = 0, major, minor; /* major associated with device driver, minor with character device */
 	//my_proc_entry = proc_create("fifoproc", 0666, NULL, &fops); //Create proc entry
 
-	if((ret = alloc_chrdev_region(&start, 0, 1, DEVICE_NAME)) || (kfifo_alloc(&cbuffer, MAX_CBUFFER_LEN, GFP_KERNEL))) {
+	if ((ret = alloc_chrdev_region(&start, 0, 1, DEVICE_NAME)) || (kfifo_alloc(&cbuffer, MAX_CBUFFER_LEN, GFP_KERNEL))) {
 		ret = -ENOMEM;
 		printk(KERN_INFO "Couldn't create the /dev entry \n");
 	}
@@ -239,9 +245,10 @@ int modulo_fifo_init(void){
 	return ret;
 }
 
-void modulo_fifo_exit(void) {
+void modulo_fifo_exit(void) 
+{
 
-	if(chardev) cdev_del(chardev);
+	if (chardev) cdev_del(chardev);
 
 	/* Unregister the device */
 	unregister_chrdev_region(start, 1);
