@@ -4,7 +4,7 @@
   <a href="https://github.com/Zildj1an/FIFO-Driver">English</a> 
   
   [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/)
-  [![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/)
+  [![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://github.com/Zildj1an/FIFO-Driver/stargazers)
 
 ## Main Idea
 👨‍🔧 Character device driver (/dev) working as a FIFO pipe, created with a Linux Kernel module.
