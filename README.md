@@ -1,4 +1,4 @@
-# FIFO-Char-Driver [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/) 
+# FIFO-Char-Driver [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 <span>Language:</span> 
   <a href="https://github.com/Zildj1an/FIFO-Driver/blob/master/LEEME.md">Español</a> |
