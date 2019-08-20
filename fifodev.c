@@ -142,7 +142,9 @@ static ssize_t fifoproc_read(struct file *f, char *buff, size_t size, loff_t *l)
 	/* lock */
 	if (down_interruptible(&mtx)) return -EINTR;
 
-	/* Wants to read more than it is available */
+	/* Wants to read more than it is available 
+	   Spectre: array_index_nospec()
+	*/
 	while (kfifo_len(&cbuffer) == 0 && prod_count > 0){
 		nr_cons_waiting++;
 		if(cond_wait(&isProducer)) return -EINTR;
